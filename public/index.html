@@ -51,11 +51,13 @@
             call.answer(stream);
             const userId = call.peer;
             call.on('stream', userVideoStream => {
-              const video = createVideoElement(userId, userVideoStream, userId);
-              container.appendChild(video);
-              addVideoStream(video, userVideoStream, userId);
+              if (!peers[userId]) {
+                const video = createVideoElement(userId, userVideoStream, userId);
+                container.appendChild(video);
+                addVideoStream(video, userVideoStream, userId);
+                peers[userId] = call;
+              }
             });
-            peers[userId] = call;
           });
 
           socket.on('user-connected', userId => {
@@ -71,6 +73,7 @@
     socket.on('user-disconnected', userId => {
       if (peers[userId]) {
         peers[userId].close();
+        delete peers[userId];
       }
       const videoElement = document.getElementById(userId);
       if (videoElement) {
@@ -81,17 +84,23 @@
     function connectToNewUser(userId, stream) {
       const call = peer.call(userId, stream);
       call.on('stream', userVideoStream => {
-        const video = createVideoElement(userId, userVideoStream, userId);
-        container.appendChild(video);
-        addVideoStream(video, userVideoStream, userId);
+        if (!peers[userId]) {
+          const video = createVideoElement(userId, userVideoStream, userId);
+          container.appendChild(video);
+          addVideoStream(video, userVideoStream, userId);
+          peers[userId] = call;
+        }
       });
       call.on('close', () => {
+        if (peers[userId]) {
+          peers[userId].close();
+          delete peers[userId];
+        }
         const videoElement = document.getElementById(userId);
         if (videoElement) {
           videoElement.parentNode.remove();
         }
       });
-      peers[userId] = call;
     }
 
     function createVideoElement(id, stream, userId) {

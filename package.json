@@ -1,0 +1,29 @@
+{
+  "name": "streaming-socket",
+  "version": "1.0.0",
+  "description": "Um servidor de streaming via sockets",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iDimaBR/streaming-socket.git"
+  },
+  "keywords": [
+    "streaming",
+    "node",
+    "express"
+  ],
+  "author": "iDimaBR",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iDimaBR/streaming-socket/issues"
+  },
+  "homepage": "https://github.com/iDimaBR/streaming-socket#readme",
+  "dependencies": {
+    "nodemon": "^3.0.2",
+    "peer": "^1.0.1",
+    "socket.io": "^4.7.2"
+  }
+}
